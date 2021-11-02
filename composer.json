@@ -1,0 +1,41 @@
+{
+  "name": "moneybatch/minimalist",
+  "description": "Moneybatch Minimalist",
+  "keywords": [
+    "nikolaynesov",
+    "money",
+    "moneybatch",
+    "minimalist"
+  ],
+  "homepage": "https://github.com/moneybatch/minimalist",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Nikolay Nesov",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^7.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Moneybatch\\Minimalist\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Moneybatch\\Minimalist\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
