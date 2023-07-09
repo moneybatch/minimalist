@@ -7,35 +7,35 @@ use Moneybatch\Minimalist\Domain\Currency\Currency;
 
 class Money
 {
-    private int $value;
+    private float $value;
     private int $unitCapacity;
 
-    public function __construct(int $subunits, int $unitCapacity = 100)
+    public function __construct(float $subunits, int $unitCapacity = 100)
     {
         $this->value = $subunits;
         $this->unitCapacity = $unitCapacity;
     }
 
-    public function getValue(): int
+    public function getValue(): float
     {
         return $this->value;
     }
 
     public function inSubunits(): int
     {
-        return $this->getValue();
+        return round($this->getValue());
     }
 
-    public function inUnits(): float
+    public function inUnits(int $precision = 2): float
     {
         $dollars = $this->value / $this->unitCapacity;
 
-        return round((float)$dollars, 2);
+        return round((float)$dollars, $precision);
     }
 
     public static function fromUnits(float $units, int $unitCapacity = 100): self
     {
-        $subunits = round($units * $unitCapacity);
+        $subunits = $units * $unitCapacity;
 
         return new static($subunits);
     }
@@ -62,12 +62,12 @@ class Money
 
     public function divideBy(int $divider): self
     {
-        return new self(round($this->value / $divider));
+        return new self($this->value / $divider);
     }
 
     public function isEmpty(): bool
     {
-        return 0 === $this->value;
+        return 0.0 === $this->value;
     }
 
     public function equal(self $money): bool
@@ -98,6 +98,36 @@ class Money
     public function percent(float $percent): MoneyPercent
     {
         return new MoneyPercent($percent, $this);
+    }
+
+    public function isNegative(): bool
+    {
+        return $this->value < 0;
+    }
+
+    public function isPositive(): bool
+    {
+        return $this->value > 0;
+    }
+
+    public function truncateNegative(): self
+    {
+        if (! $this->isNegative()) {
+            return $this;
+        }
+
+        return new static(0);
+    }
+
+    public static function sum(...$components): self
+    {
+        $sum = new static(0);
+
+        foreach ($components as $component) {
+            $sum = $sum->add($component);
+        }
+
+        return $sum;
     }
 
 }
